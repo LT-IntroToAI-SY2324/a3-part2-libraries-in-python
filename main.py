@@ -1,5 +1,6 @@
 from match import match
 from typing import List, Tuple, Callable, Any
+from weather_api import weather
 
 pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
     
@@ -27,3 +28,5 @@ def search_pa_list(src: List[str]) -> List[str]:
                 return pa_list[i][1](match(pa_list[i][0], src))
 
     return ["I don't understand"]
+
+weather("Chicago")
