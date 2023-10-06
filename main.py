@@ -1,9 +1,12 @@
 from match import match
 from typing import List, Tuple, Callable, Any
-from weather_api import weather
+from weather_api import *
+
+def curr_temp(city: str):
+    return weather(city)
 
 pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
-    
+    (str.split("what's the temperature in %"), temperature),    
 ]
 
 
@@ -29,4 +32,22 @@ def search_pa_list(src: List[str]) -> List[str]:
 
     return ["I don't understand"]
 
-weather("Chicago")
+def query_loop() -> None:
+    """The simple query loop. The try/except structure is to catch Ctrl-C or Ctrl-D
+    characters and exit gracefully.
+    """
+    print("Welcome to the weather machine!\n")
+    while True:
+        try:
+            print()
+            query = input("Your query? ").replace("?", "").lower().split()
+            answers = search_pa_list(query)
+            for ans in answers:
+                print(ans)
+
+        except (KeyboardInterrupt, EOFError):
+            break
+
+    print("\nSo long!\n")
+
+query_loop()
