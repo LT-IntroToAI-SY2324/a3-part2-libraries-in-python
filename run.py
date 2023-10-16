@@ -44,10 +44,26 @@ def search_pa_list(src: List[str]) -> List[str]:
             else:
                 return pa_list[i][1](match(pa_list[i][0], src))
 
+    city_user = input("What's the city in that string? \n").lower().split()
+    try:
+        e = src.index(city_user[0])
+        print(e)
+    except:
+        print("City not found in string!")
+        return []
     stri = ""
-    for i in range(len(src) - 1):
+    counter = 0
+    skipper = False
+    for i in range(len(src)):
+        if(src[i] == src[e]):
+            stri += "% "
+            skipper = True
+            continue
+        if(counter < (e) and skipper):
+            counter += 1
+            continue
+        skipper = False
         stri += src[i] + " "
-    stri += "%"
     add_pat = input(f"Do you want to add this pattern, --- {stri} --- y/n \n")
     if(add_pat == "y"):
         a = [temperature, updated, cond, wind_deg, wind_speed, wind_dir, precip, feels, vis, uv, gust, aqi, all]
