@@ -44,7 +44,20 @@ def search_pa_list(src: List[str]) -> List[str]:
             else:
                 return pa_list[i][1](match(pa_list[i][0], src))
 
-    return ["I don't understand"]
+    stri = ""
+    for i in range(len(src) - 1):
+        stri += src[i] + " "
+    stri += "%"
+    add_pat = input(f"Do you want to add this pattern, --- {stri} --- y/n \n")
+    if(add_pat == "y"):
+        a = [temperature, updated, cond, wind_deg, wind_speed, wind_dir, precip, feels, vis, uv, gust, aqi, all]
+        b = ["temperature", "last updated", "conditon", "wind degree", "wind speed", "wind direction", "precipitation", "feels like", "visibility", "uv", "gust", "air quality", "everything"]
+        user_input = input(f"Which function should this pattern point to, {b}: ")
+        try:
+            pa_list.append((str.split(stri), a[b.index(user_input)]))
+        except: 
+            print("Not a valid function")
+    return []
 
 def run() -> None:
     """The simple query loop. The try/except structure is to catch Ctrl-C or Ctrl-D
