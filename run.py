@@ -24,7 +24,7 @@ pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
 ]
 
 
-def search_pa_list(src: List[str]) -> List[str]:
+def search_pa_list(src: List[str], srcs: str) -> List[str]:
     """Takes source, finds matching pattern and calls corresponding action. If it finds
     a match but has no answers it returns ["No answers"]. If it finds no match it
     returns ["I don't understand"].
@@ -44,35 +44,29 @@ def search_pa_list(src: List[str]) -> List[str]:
             else:
                 return pa_list[i][1](match(pa_list[i][0], src))
 
-    city_user = input("What's the city in that string? \n").lower().split()
-    try:
-        e = src.index(city_user[0])
-        print(e)
-    except:
-        print("City not found in string!")
-        return []
+    city_user = input("What's the city in that string? \n").lower()
     stri = ""
-    counter = 0
-    skipper = False
-    for i in range(len(src)):
-        if(src[i] == src[e]):
+    skip_amount = 0
+    for i in range(len(srcs)):
+        strb = srcs[i:i+len(city_user)].lower()
+        if(strb == city_user):
             stri += "% "
-            skipper = True
+            skip_amount = len(city_user)
             continue
-        if(counter < (e) and skipper):
-            counter += 1
+        if skip_amount > 0:
+            skip_amount -= 1
             continue
-        skipper = False
-        stri += src[i] + " "
-    add_pat = input(f"Do you want to add this pattern, --- {stri} --- y/n \n")
+        stri += srcs[i]     
+    add_pat = input(f"\nDo you want to add this pattern, --- {stri} --- \ny/n \n")
     if(add_pat == "y"):
         a = [temperature, updated, cond, wind_deg, wind_speed, wind_dir, precip, feels, vis, uv, gust, aqi, all]
         b = ["temperature", "last updated", "conditon", "wind degree", "wind speed", "wind direction", "precipitation", "feels like", "visibility", "uv", "gust", "air quality", "everything"]
-        user_input = input(f"Which function should this pattern point to, {b}: ")
+        user_input = input(f"\nWhich function should this pattern point to, {b}: ")
         try:
             pa_list.append((str.split(stri), a[b.index(user_input)]))
+            return [f"\n \nSuccessfully added pattern \033[31m{stri}\033[0m paired with function \033[31m{user_input}\033[0m \n \n"]
         except: 
-            print("Not a valid function")
+            return("Not a valid function")
     return []
 
 def run() -> None:
@@ -83,8 +77,8 @@ def run() -> None:
     while True:
         try:
             print()
-            query = input("Your query? ").replace("?", "").lower().split()
-            answers = search_pa_list(query)
+            query = input("Your query? ").replace("?", "").lower()
+            answers = search_pa_list(query.split(), query)
             for ans in answers:
                 print(ans)
 
